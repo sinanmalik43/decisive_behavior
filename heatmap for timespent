@@ -1,0 +1,36 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Data preparation
+data = """ add data or upload the csv file"""
+
+# Convert the data to a DataFrame
+df = pd.DataFrame([row.split() for row in data.split('\n')], dtype=float)
+
+# Set column names
+df.columns = ['CNTRL', 'HGRY', 'CNTRL+D', 'HGRY+D', 'CNTRL+PDTR', 'HGRY+PDTR', 'CNTRL+D+PDTR', 'HGRY+D+PDTR']
+
+# Create the heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(df, cmap="coolwarm", annot=True, fmt=".1e",annot_kws={'size': 8})
+
+# Set labels and title
+plt.xlabel('')
+
+# Set labels and title
+plt.ylabel('Time Spent in Stimulus Zone (s)', labelpad=15)  # Increase the labelpad to add more space
+
+# Add label to the Y-axis to replace sample numbers
+plt.gca().set_ylabel('Time Spent in Stimulus Zone (s)', fontsize=15)
+
+# Rotate x-axis labels for better readability
+plt.xticks(rotation=45, ha='right')
+
+# Remove Y-axis ticks (sample numbers)
+plt.yticks([])
+  
+#plt the figure with high resolution (format="png", dpi=600)
+# Adjust layout and display the plot
+plt.tight_layout()
+plt.show()
