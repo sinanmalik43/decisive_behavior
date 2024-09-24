@@ -1,0 +1,66 @@
+@author: neuronalplasticity group (sinanmalik)
+"""
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Data
+data = [ add the csv file or data]
+
+# Create DataFrame
+groups = ['CNTRL', 'HGRY', 'CNTRL + D', 'HGRY + D', 'CNTRL + PDTR', 'HGRY + PDTR', 'CNTRL + D + PDTR', 'HGRY + D + PDTR']
+df = pd.DataFrame({
+    'Group': [group for group in groups for _ in range(20)],
+    'Number of Entries': data,
+    'Sample': [i for _ in groups for i in range(1, 21)]
+})
+
+# Set style
+sns.set_style("white")
+
+# Create small multiple time series plot
+g = sns.relplot(
+    data=df,
+    x="Sample",
+    y="Number of Entries",
+    col="Group",
+    kind="line",
+    col_wrap=4,
+    height=3,
+    aspect=1.2,
+    linewidth=2,
+    marker='o',
+    markersize=4,
+    facet_kws={'sharex': False, 'sharey': False}
+)
+
+# Customize the plot
+g.fig.suptitle('', fontsize=16, y=1.05)
+g.set_axis_labels("Sample size", "No. of Entries to Stimulus Zone", fontsize=13)  # Increased font size
+
+# Adjust x-axis and y-axis for each subplot
+for ax in g.axes.flat:
+    # Set x-axis ticks and labels
+    ax.set_xticks(range(2, 21, 2))
+    ax.set_xticklabels(range(2, 21, 2))
+    ax.tick_params(axis='x', labelsize=10)  # Adjust x-axis tick label size
+    
+    # Set y-axis limit and ticks
+    ax.set_ylim(0, 120)
+    ax.set_yticks(range(0, 121, 20))
+    ax.tick_params(axis='y', labelsize=10)  # Adjust y-axis tick label size
+    
+    # Move group name to top right corner
+    title = ax.get_title()
+    ax.set_title('')
+    ax.text(0.95, 0.95, title.split('=')[1].strip(), transform=ax.transAxes, 
+            ha='right', va='top', fontsize=12, fontweight='bold')
+
+#plt the figure with high resolution (format="png", dpi=600)
+
+fig = plt.figure(figsize=(19.20,10.80))
+
+# Adjust layout and display the plot
+plt.tight_layout()
+plt.show()
