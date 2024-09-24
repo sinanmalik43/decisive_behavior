@@ -1,0 +1,51 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Data preparation
+data = """ add data for upload the csv file """
+
+
+# Convert the data to a DataFrame
+df = pd.DataFrame([row.split() for row in data.split('\n')], dtype=float)
+
+# Set column names
+df.columns = ['CNTRL', 'HGRY', 'CNTRL+D', 'HGRY+D', 'CNTRL+PDTR', 'HGRY+PDTR', 'CNTRL+D+PDTR', 'HGRY+D+PDTR']
+
+# Melt the dataframe for easier plotting
+df_melted = df.melt(var_name='Group', value_name='Time')
+
+# Set a color palette
+color_palette = sns.color_palette("husl", 8)
+
+# Create KDE plot for all groups
+plt.figure(figsize=(12, 6))
+sns.kdeplot(data=df_melted, x='Time', hue='Group', palette=color_palette, shade=True)
+plt.title('')
+plt.xlabel('Time Spent in Stimulus Zone (s)', fontsize=14)
+plt.ylabel('Density', fontsize=14)
+plt.legend(title='Groups', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.tight_layout()
+plt.show()
+
+# Create individual KDE plots for each group
+fig, axs = plt.subplots(2, 4, figsize=(20, 10))
+fig.suptitle('', fontsize=16)
+
+#plt the figure with high resolution (format="png", dpi=600)
+
+for i, (col, ax) in enumerate(zip(df.columns, axs.flatten())):
+    sns.kdeplot(data=df[col], ax=ax, shade=True, color=color_palette[i])
+    ax.set_title(col)
+    ax.set_xlabel('Latency to Enter Stimulus Zone (s)', size=13)
+    ax.set_ylabel('Density',size=13)
+    
+plt.tight_layout()
+plt.show()
+
+#plt the figure with high resolution (format="png", dpi=2000)
+
+fig = plt.figure(figsize=(19.20,10.80))
+
+# Print summary statistics
+print(df.describe())
