@@ -1,0 +1,95 @@
+@author: neuronalplasticity group (sinanmalik)
+"""
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy.stats import mannwhitneyu
+
+# Data preparation
+data = [ add csv file]
+
+# Create a DataFrame
+df = pd.DataFrame(data, columns=[
+    'CNTRL', 'HGRY', 'CNTRL + D', 'HGRY + D', 'CNTRL + D + PDTR', 'HGRY + D + PDTR'
+])
+
+# Melt the DataFrame to long format
+df_long = df.melt(var_name='Group', value_name='Number of Bites')
+
+# Define the pairs of groups to test
+pairs = [
+    ('CNTRL', 'CNTRL + D'),
+    ('HGRY', 'HGRY + D'),
+    ('CNTRL + D + PDTR', 'HGRY + D + PDTR')
+]
+
+# Perform Mann-Whitney U tests and store p-values
+p_values = {}
+for group1, group2 in pairs:
+    stat, p = mannwhitneyu(df[group1], df[group2])
+    p_values[f'{group1} vs {group2}'] = p
+
+# Set the theme without the grid
+sns.set_theme(style="white",
+    rc={
+        "axes.titlesize": 14,
+        "axes.labelsize": 13,
+        "xtick.labelsize": 10,
+        "ytick.labelsize": 12}
+)
+
+# Create the plot
+plt.figure(figsize=(12, 8))
+
+# Create a horizontal boxplot
+ax = sns.boxplot(x='Number of Bites', y='Group', data=df_long, whis=[0, 100], width=.6, palette='Dark2', fliersize=0)
+
+# Overlay the strip plot
+sns.stripplot(x='Number of Bites', y='Group', data=df_long, size=8, color='black', alpha=0.6, ax=ax)
+
+# Customize the plot
+plt.xlabel('Number of Dot Bites', labelpad=25, size=18)
+plt.ylabel('')
+
+# Customize the axes color
+ax.spines['left'].set_color('black')
+ax.spines['bottom'].set_color('black')
+ax.xaxis.label.set_color('black')
+ax.yaxis.label.set_color('black')
+ax.tick_params(axis='x', colors='black')
+ax.tick_params(axis='y', colors='black')
+
+# Remove top and right spines
+sns.despine(left=False, bottom=False)
+
+# Set specific x-axis ticks and labels
+x_ticks = [0, 100, 200, 300, 400, 500, 600, 700]
+ax.set_xticks(x_ticks)
+ax.set_xticklabels(x_ticks)
+x_labels = ['0', '100', '200', '300', '400', '500', '600', '700', '800', '900']
+
+# Set specific y-axis labels
+y_labels = ['CNTRL', 'HGRY', 'CNTRL + D', 'HGRY + D', 'CNTRL + D + PDTR', 'HGRY + D + PDTR']
+ax.set_yticks(range(len(y_labels)))
+ax.set_yticklabels(y_labels)
+
+# Add ticks only on the bottom x-axis and left y-axis
+ax.tick_params(axis='x', which='both', top=False, bottom=True, labeltop=False, labelbottom=True)
+ax.tick_params(axis='y', which='both', left=True, right=False, labelleft=True, labelright=False)
+
+# Increase the font size of y-axis labels
+for label in ax.get_yticklabels():
+    label.set_fontsize(15)
+
+# Increase the font size of x-axis labels
+for label in ax.get_xticklabels():
+    label.set_fontsize(15)
+
+#plt the figure with high resolution (format="png", dpi=600)
+
+fig = plt.figure(figsize=(19.20,10.80))
+
+# Show the plot
+plt.tight_layout()
+plt.show()
