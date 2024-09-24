@@ -1,0 +1,36 @@
+@author: neuronalplasticity group (sinanmalik)
+"""
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Create DataFrame
+data = [ add the csv file]
+columns = ['CNTRL', 'HGRY', 'CNTRL+D', 'HGRY+D', 'CNTRL+D+PDTR', 'HGRY+D+PDTR']
+df = pd.DataFrame(data, columns=columns)
+
+# Correlation matrix
+correlation_matrix = df.corr(method='spearman')
+
+# Function to plot the correlation matrix
+def plot_correlation_matrix(size=(6, 5)):
+    fig, ax = plt.subplots(figsize=size)
+    
+    # Plot heatmap
+    sns.heatmap(correlation_matrix, 
+                annot=False, 
+                cmap='coolwarm', 
+                vmin=-1, 
+                vmax=1, 
+                cbar_kws={'ticks': [-1, 0, 1], 'shrink': .7})
+    
+    # Adjust layout
+    plt.title("Spearman Correlation Matrix", fontsize=10)
+    plt.tight_layout()
+    
+    # Show plot
+    plt.show()
+
+# Plot with adjusted size
