@@ -1,0 +1,38 @@
+@author: neuronalplasticity group (sinanmalik)
+"""
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Data
+data = [ data csv file]
+
+# Column names
+columns = ['CNTRL', 'HGRY', 'CNTRL+D', 'HGRY+D', 'CNTRL+D+PDTR', 'HGRY+D+PDTR']
+
+# Create DataFrame
+df = pd.DataFrame(data, columns=columns)
+
+# Set up the plot style
+sns.set(style="ticks", font_scale=1.2)
+
+# Create the pairplot
+g = sns.pairplot(df, diag_kind="kde", plot_kws={"color": "blue", "s": 75, "alpha": 0.7}, 
+                 diag_kws={"color": "blue"})
+
+# Customize the plot
+g.fig.suptitle("", y=1.02, fontsize=16)
+
+# Increase x and y axis label sizes
+for ax in g.axes.flat:
+    if ax.get_xlabel():
+        ax.set_xlabel(ax.get_xlabel(), fontsize=13)
+    if ax.get_ylabel():
+        ax.set_ylabel(ax.get_ylabel(), fontsize=12)
+
+#plt the figure with high resolution (format="png", dpi=2000)
+
+# Adjust layout and display the plot
+plt.tight_layout()
+plt.show()
